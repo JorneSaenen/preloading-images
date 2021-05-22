@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>preloader img</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/css-spinning-spinners/1.1.1/load6.css"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      .grid {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        width: 90%;
+        max-width: 1500px;
+        margin: 20px auto 0 auto;
+      }
+
+      .grid .item {
+        width: 24%;
+        border: 1px solid black;
+        margin-bottom: 20px;
+        aspect-ratio: 1/1;
+      }
+
+      .grid .item img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid"></div>
+    <script>
+      const imgs = [
+        'https://unsplash.com/photos/S0txA-JnUFA/download',
+        'https://unsplash.com/photos/jiCmX3fUjZk/download',
+        'https://unsplash.com/photos/QJbyG6O0ick/download',
+        'https://unsplash.com/photos/UUdJ-0LQs0M/download',
+        'https://unsplash.com/photos/vZ_7HMZ3XLs/download',
+        'https://unsplash.com/photos/oMvtVzcFPlU/download',
+        'https://unsplash.com/photos/FA7TpPIZ7xw/download',
+        'https://unsplash.com/photos/ppgFysfT7tc/download',
+        'https://unsplash.com/photos/h7VBJRBcieM/download',
+        'https://unsplash.com/photos/9FvTOCfvt_w/download',
+      ];
+
+      const grid = document.querySelector('.grid');
+      grid.innerHTML = '<div class="loading"></grid>';
+
+      const showImages = async () => {
+        await preloadImages(imgs);
+        grid.innerHTML = imgs
+          .map((path) => `<div class="item"><img src="${path}" /></div>`)
+          .join('');
+      };
+
+      const preloadImages = (arr) =>
+        Promise.all(
+          arr.map(
+            (path) =>
+              new Promise((resolve, reject) => {
+                const image = new Image();
+                image.src = path;
+                image.onload = resolve;
+                image.onerror = reject;
+              })
+          )
+        );
+
+      showImages();
+    </script>
+  </body>
+</html>
